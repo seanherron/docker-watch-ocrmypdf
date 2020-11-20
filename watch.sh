@@ -78,22 +78,40 @@ inotifywait -r -m $WOCR_CONSUME_PATH -e create -e moved_to |
             echo no WOCR_AFTER command set.
         fi
 
-        cmdVarName="WOCR_AFTERAFTERCMD"
+        cmdVarName="WOCR_AFTERCOPYCMD"
         if [ ! -z "$subdirectory" ]; then
-            cmdVarName="WOCR_AFTERAFTERCMD_$subdirectory"
+            cmdVarName="WOCR_AFTERCOPYCMD_$subdirectory"
             if [ -z ${!cmdVarName} ]; then
                 echo $cmdVarName is not set. Using default.
-                cmdVarName="WOCR_AFTERAFTERCMD"
+                cmdVarName="WOCR_AFTERCOPYCMD"
             fi
         fi
 
         if [ ! -z "${!cmdVarName}" ]; then
-            afterafter_cmd=$(echo ${!cmdVarName} | sed "s|%INFILE%|$file|")
+            aftercopy_cmd=$(echo ${!cmdVarName} | sed "s|%FILE%|$file|")
 
-            echo $afterafter_cmd
-            $afterafter_cmd
+            echo $aftercopy_cmd
+            $aftercopy_cmd
         else
-            echo no WOCR_AFTERAFTER command set.
+            echo no WOCR_AFTERCOPYCMD command set.
+        fi
+
+        cmdVarName="WOCR_AFTERDELCMD"
+        if [ ! -z "$subdirectory" ]; then
+            cmdVarName="WOCR_AFTERDELCMD_$subdirectory"
+            if [ -z ${!cmdVarName} ]; then
+                echo $cmdVarName is not set. Using default.
+                cmdVarName="WOCR_AFTERDELCMD"
+            fi
+        fi
+
+        if [ ! -z "${!cmdVarName}" ]; then
+            afterdel_cmd=$(echo ${!cmdVarName} | sed "s|%FILE%|$file|")
+
+            echo $afterdel_cmd
+            $afterdel_cmd
+        else
+            echo no WOCR_AFTERDELCMD command set.
         fi
 
         rm $fullfile
