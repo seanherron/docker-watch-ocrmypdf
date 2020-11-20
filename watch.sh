@@ -71,13 +71,30 @@ inotifywait -r -m $WOCR_CONSUME_PATH -e create -e moved_to |
 
         if [ ! -z "${!cmdVarName}" ]; then
             after_cmd=$(echo ${!cmdVarName} | sed "s|%FILE%|$fullfile|")
-           
+
             echo $after_cmd
             $after_cmd
         else
             echo no WOCR_AFTER command set.
         fi
 
+        cmdVarName="WOCR_AFTERAFTERCMD"
+        if [ ! -z "$subdirectory" ]; then
+            cmdVarName="WOCR_AFTERAFTERCMD_$subdirectory"
+            if [ -z ${!cmdVarName} ]; then
+                echo $cmdVarName is not set. Using default.
+                cmdVarName="WOCR_AFTERAFTERCMD"
+            fi
+        fi
+
+        if [ ! -z "${!cmdVarName}" ]; then
+            afterafter_cmd=$(echo ${!cmdVarName} | sed "s|%INFILE%|$path$file|")
+
+            echo $afterafter_cmd
+            $afterafter_cmd
+        else
+            echo no WOCR_AFTERAFTER command set.
+        fi
+
         rm $fullfile
     done
-
