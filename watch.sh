@@ -88,7 +88,7 @@ inotifywait -r -m $WOCR_CONSUME_PATH -e create -e moved_to |
         fi
 
         if [ ! -z "${!cmdVarName}" ]; then
-            afterafter_cmd=$(echo ${!cmdVarName} | sed "s|%INFILE%|$path$file|")
+            afterafter_cmd=$(echo ${!cmdVarName} | sed "s|%INFILE%|$file|")
 
             echo $afterafter_cmd
             $afterafter_cmd
